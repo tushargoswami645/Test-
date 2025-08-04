@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+
+      // *Find the Missing Number:*
+let numbers = [1, 2, 4, 5]; 
+function findMissingNumber(arr) {
+    let n = arr.length + 1;
+    let totalSum = (n * (n + 1)) / 2;
+
+    let arraySum = 0;
+    for (let i = 0; i < arr.length; i++) {
+        arraySum += arr[i];  
+    }
+
+    return totalSum - arraySum;
+}
+
+let missingNumber = findMissingNumber(numbers);
+
+console.log("The missing number is:", missingNumber);
+
+
+
+
+
+
+    
+//**Kth Smallest Element in an Array:** 
+    function select(arr, k) {
+        if (k>arr.length) {
+         console.log("k is big amount");
+            
+        }
+    function myselect(left, right, ksmall) {
+    if (left === right) 
+    return arr[left];
+
+    let pivot = arr[right];
+    let p = left;
+
+    for (let i = left; i < right; i++) {
+      if (arr[i] < pivot) [arr[i], arr[p++]] = [arr[p], arr[i]];
+    }
+    [arr[p], arr[right]] = [arr[right], arr[p]];
+
+    if (ksmall === p) 
+    return arr[p];
+    return ksmall < p ? myselect(left, p - 1, ksmall) : myselect(p + 1, right, ksmall);
+  }
+
+    return myselect(0, arr.length - 1, k - 1);
+}
+console.log("second smallest number in array is :", select([1, 2, 3, 4, 5, 6], 2));  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//**Search in a Rotated Sorted Array:** 
+const nums = [4, 5, 6, 7, 0, 1, 2];
+const target = 7;
+
+function search(nums, target) {
+let left = 0;
+let right = nums.length - 1;
+
+while (left <= right) {
+ let mid = Math.floor((left + right) / 2);
+
+if (nums[mid] === target) 
+return mid;
+
+      if (nums[left] <= nums[mid]) {
+      if (nums[left] <= target && target < nums[mid]) {
+        right = mid - 1;
+      } else {
+        left = mid + 1;
+      }
+    } 
+    
+    else {
+      if (nums[mid] < target && target <= nums[right]) {
+        left = mid + 1;
+      } else {
+        right = mid - 1;
+      }
+    }
+  }
+
+  return ["not in array"]; 
+}
+console.log("k is the place on index :", search(nums, target)); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ //**Reverse a Linked List in Groups of K:** 
+class ListNode {
+  constructor(val) {
+    this.val = val;
+    this.next = null;
+  }
+}
+
+function reverseKGroup(head, k) {
+  let count = 0;
+  let current = head;
+
+ 
+  while (current && count < k) {
+    current = current.next;
+    count++;
+  }
+
+  if (count === k) {
+    // Reverse k nodes
+    let prev = null;
+    let curr = head;
+    let next = null;
+    let i = 0;
+
+    while (i < k && curr) {
+      next = curr.next;
+      curr.next = prev;
+      prev = curr;
+      curr = next;
+      i++;
+    }
+
+    // Recursively reverse the next group
+    if (next) {
+      head.next = reverseKGroup(next, k);
+    }
+
+    return prev;
+  }
+
+  return head; // If less than k nodes, return as is
+}
+
+// Helper: Create linked list from array
+function createLinkedList(arr) {
+  if (!arr.length) return null;
+  let head = new ListNode(arr[0]);
+  let current = head;
+  for (let i = 1; i < arr.length; i++) {
+    current.next = new ListNode(arr[i]);
+    current = current.next;
+  }
+  return head;
+}
+
+// Helper: Print linked list
+function printLinkedList(head) {
+  let result = [];
+  while (head) {
+    result.push(head.val);
+    head = head.next;
+  }
+  console.log(result.join(" -> "));
+}
+
+let arr = [1, 2, 3, 4,];
+let k = 2;
+let head = createLinkedList(arr);
+let newHead = reverseKGroup(head, k);
+printLinkedList(newHead);  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Longest Substring Without Repeating Characters
+ function lengthOfLongestSubstring(s) {
+  let set = new Set();
+  let left = 0;
+  let maxLength = 0;
+
+  for (let right = 0; right < s.length; right++) {
+    while (set.has(s[right])) {
+      set.delete(s[left]);
+      left++;
+    }
+    set.add(s[right]);
+    maxLength = Math.max(maxLength, right - left + 1);
+  }
+
+  return maxLength;
+}
+
+console.log("Longest substring is :", lengthOfLongestSubstring("abdbcaebcbb"));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// **Detect and Remove Loop in Linked List:** 
+class ListNodee {
+  constructor(val) {
+    this.val = val;
+    this.next = null;
+  }
+}
+
+function detectAndRemoveLoop(headd) {
+  let slow = headd, fast = headd;
+
+  // Move through the list to detect a loop
+  while (fast && fast.next) {
+    slow = slow.next;         
+    fast = fast.next.next;     
+
+    // If slow and fast meet, a loop exists
+    if (slow === fast) {
+      // Reset slow to head to find the start of the loop
+      slow = headd;
+
+      // They will meet at the start of the loop
+      while (slow !== fast) {
+        slow = slow.next;
+        fast = fast.next;
+      }
+
+      // Find the last node in the loop
+      let ptr = fast;
+      while (ptr.next !== fast) {
+        ptr = ptr.next;
+      }
+
+      // Break the loop 
+      ptr.next = null;
+
+      return true; 
+    }
+  }
+  return false;
+}
+
+
+const headd = new ListNodee(1);
+headd.next = new ListNodee(2);
+headd.next.next = new ListNodee(3);
+headd.next.next.next = new ListNodee(4);
+headd.next.next.next.next = new ListNodee(5);
+
+headd.next.next.next.next.next = headd.next.next; 
+console.log( "Loop was detected in linked list:", detectAndRemoveLoop(headd)); 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//Lowest Common Ancestor (LCA) of a Binary Tree:
+class TreeNode {
+  constructor(val) {
+    this.val = val;
+    this.left = null;
+    this.right = null;
+  }
+}
+
+const root = new TreeNode(3);
+root.left = new TreeNode(5);
+root.right = new TreeNode(1);
+root.left.left = new TreeNode(6);
+root.left.right = new TreeNode(2);
+root.right.left = new TreeNode(0);
+root.right.right = new TreeNode(8);
+root.left.right.left = new TreeNode(7);
+root.left.right.right = new TreeNode(4);
+
+function lowestCommonAncestor(root, p, q) {
+  if (root === null || root === p || root === q)
+   return root;
+
+  const left = lowestCommonAncestor(root.left, p, q);
+  const right = lowestCommonAncestor(root.right, p, q);
+
+  if (left && right) 
+  return root;
+  return left ? left : right;
+}
+
+const p = root.left;       
+const q = root.right;     
+
+const lca = lowestCommonAncestor(root, p, q);
+
+console.log("Lowest Common Ancestor:", lca.val);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Detect Cycle in a Directed Graph: 
+function hasCycle(graph) {
+  const visited = new Set();
+  const recStack = new Set();
+
+  function dfs(node) {
+    if (recStack.has(node)) return true;  // find the cycle in compelet or not 
+    if (visited.has(node)) return false;
+
+    visited.add(node);
+    recStack.add(node);
+
+    for (let neighbor of graph[node]) {
+      if (dfs(neighbor)) return true;
+    }
+
+    recStack.delete(node); return false;
+  }
+
+  for (let node in graph) {
+    if (dfs(node)) return true;
+  }
+  return false;
+}
+
+const graph = {
+  A: ['B'],
+  B: ['C'],
+  C: ['A'] 
+};
+
+console.log("Detect Cycle in a Directed Graph:", hasCycle(graph)); 
+
+
+
+
+
+
+  </script>
+</body>
+</html>
